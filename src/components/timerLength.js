@@ -9,8 +9,8 @@ const TimerLengthControl = React.createClass({
           id="timer-length"
           type="text"
           className="form-control"
-          value={this.props.timerLength / 60}
-          onChange={this.handleChange}
+          // value={this.props.timerLength / 60}
+          onBlur={this.handleChange}
         />
       </div>
     )
