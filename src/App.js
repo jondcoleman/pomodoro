@@ -1,27 +1,34 @@
 require('offline-plugin/runtime').install()
 
 import React from 'react'
-// import logo from './logo.svg'
 import './App.css'
 import TimerLengthControl from './components/timerLength.js'
 import StartButton from './components/startButton.js'
 import TimerFinished from './components/timerFinished.js'
 import ResetButton from './components/resetButton.js'
-// import RemainingCircle from './components/remainingCircle.js'
 import calculateRemainingPercent from './utils/calculateRemainingPercent.js'
 import CircleProgress from './components/progressCircle.js'
 import './vendor/circle-progressbar.css'
+import store from 'store'
 
 const App = React.createClass({
   getInitialState: function() {
     return {
-      timerLength: 10, // seconds
-      currentTimer: 10,
+      timerLength: 60, // seconds
+      currentTimer: 60,
       breakLength: 300,
       breakTimer: 300,
       status: 'pending',
       valid: true
     }
+  },
+  componentDidMount: function() {
+    const pomodoro = store.get('pomodoro')
+    this.setState({
+      timerLength: pomodoro.timer.length,
+      currentTimer: pomodoro.timer.length
+    })
+    Notification.requestPermission()
   },
   render: function() {
     if (this.state.status === 'finished') return (
@@ -56,6 +63,7 @@ const App = React.createClass({
       timerLength: length,
       currentTimer: length
     })
+    store.set('pomodoro', { timer: { length } })
   },
   startTimer: function() {
     this.setState({ status: 'running' })
@@ -68,6 +76,7 @@ const App = React.createClass({
       if (this.state.currentTimer === 0) {
         this.setState({ status: 'finished' })
         clearInterval(timer)
+        new Notification('Timer\'s Up!')
         return
       }
       // decrement the timer each time

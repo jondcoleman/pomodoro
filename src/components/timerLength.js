@@ -6,6 +6,9 @@ const TimerLengthControl = React.createClass({
       value: this.props.timerLength / 60
     };
   },
+  componentWillReceiveProps: function(nextProps) {
+    this.setState({ value: nextProps.timerLength / 60 })
+  },
   render: function() {
     return (
       <div className={`form-group ${!this.props.valid ? 'has-error': ''}`}>
