@@ -1,23 +1,36 @@
 import React from 'react'
 
 const TimerLengthControl = React.createClass({
+  getInitialState: function() {
+    return {
+      value: this.props.timerLength / 60
+    };
+  },
   render: function() {
     return (
-      <div>
+      <div className={`form-group ${!this.props.valid ? 'has-error': ''}`}>
         <label htmlFor="timer-length">Pomodoro Length (minutes)</label>
         <input
           id="timer-length"
           type="text"
           className="form-control"
-          // value={this.props.timerLength / 60}
-          onBlur={this.handleChange}
+          value={this.state.value}
+          onChange={this.handleChange}
         />
       </div>
     )
   },
   handleChange: function(e) {
     e.preventDefault()
-    this.props.handleTimerLengthChange(parseInt(e.target.value) * 60)
+    this.setState({ value: e.target.value })
+    const min = +e.target.value
+    console.log(min)
+    if (isNaN(min)) {
+      this.props.handleValidation(false)
+      return
+    }
+    this.props.handleValidation(true)
+    this.props.handleTimerLengthChange(min * 60)
   }
 })
 

@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
-import logo from './logo.svg'
+import React from 'react'
+// import logo from './logo.svg'
 import './App.css'
 import TimerLengthControl from './components/timerLength.js'
 import StartButton from './components/startButton.js'
 import TimerFinished from './components/timerFinished.js'
 import ResetButton from './components/resetButton.js'
-import RemainingCircle from './components/remainingCircle.js'
+// import RemainingCircle from './components/remainingCircle.js'
 import calculateRemainingPercent from './utils/calculateRemainingPercent.js'
+import CircleProgress from './components/progressCircle.js'
+import './vendor/circle-progressbar.css'
 
 const App = React.createClass({
   getInitialState: function() {
@@ -15,7 +17,8 @@ const App = React.createClass({
       currentTimer: 10,
       breakLength: 300,
       breakTimer: 300,
-      status: 'pending'
+      status: 'pending',
+      valid: true
     }
   },
   render: function() {
@@ -28,13 +31,18 @@ const App = React.createClass({
           <div className="col-md-4 col-md-offset-4">
             <TimerLengthControl
               timerLength={this.state.timerLength}
+              valid={this.state.valid}
               handleTimerLengthChange={this.handleTimerLengthChange}
+              handleValidation={this.handleValidation}
             />
-          <StartButton startTimer={this.startTimer} />
+          <StartButton
+            startTimer={this.startTimer}
+            disabled={!this.state.valid}
+          />
           <ResetButton reset={this.resetTimer} />
-          <RemainingCircle
-            percent={calculateRemainingPercent(this.state.timerLength, this.state.currentTimer)}
-            remainingTime={this.state.currentTimer}
+          <CircleProgress
+            percentage={calculateRemainingPercent(this.state.currentTimer, this.state.timerLength)}
+            timeRemaining={this.state.currentTimer}
           />
           </div>
         </div>
@@ -69,7 +77,16 @@ const App = React.createClass({
       status: 'pending',
       currentTimer: this.state.timerLength
     })
+  },
+  handleValidation: function(valid) {
+    this.setState({ valid })
   }
 })
 
 export default App
+
+
+// <RemainingCircle
+//   percent={calculateRemainingPercent(this.state.timerLength, this.state.currentTimer)}
+//   remainingTime={this.state.currentTimer}
+// />

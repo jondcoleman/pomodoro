@@ -1,0 +1,2 @@
+- handle reset if input is invalid.
+- don't allow change to running timer if input is changed while running
