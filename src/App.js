@@ -1,3 +1,5 @@
+require('offline-plugin/runtime').install()
+
 import React from 'react'
 // import logo from './logo.svg'
 import './App.css'
