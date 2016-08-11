@@ -136,6 +136,9 @@ module.exports = {
       }
     }),
     new ExtractTextPlugin('static/css/[name].[contenthash:8].css'),
-    new OfflinePlugin()
+    new OfflinePlugin({
+      updateStrategy: 'all',
+      version: '[hash]'
+    })
   ]
 };

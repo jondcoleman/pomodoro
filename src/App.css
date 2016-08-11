@@ -19,6 +19,13 @@
   font-size: large;
 }
 
+#timer-length {
+  width:80px;
+  font-size:2em;
+  text-align:center;
+  margin: 0 auto;
+}
+
 .pom-button {
   margin: 10px 5px 5px 5px;
 }

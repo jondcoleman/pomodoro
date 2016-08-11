@@ -1,31 +1,30 @@
 import React from 'react'
 
 const TimerLengthControl = React.createClass({
-  getInitialState: function() {
-    return {
-      value: this.props.timerLength / 60
-    };
-  },
-  componentWillReceiveProps: function(nextProps) {
-    this.setState({ value: nextProps.timerLength / 60 })
-  },
   render: function() {
     return (
       <div className={`form-group ${!this.props.valid ? 'has-error': ''}`}>
-        <label htmlFor="timer-length">Pomodoro Length (minutes)</label>
+        <h2 htmlFor="timer-length">Minutes</h2>
         <input
           id="timer-length"
           type="text"
           className="form-control"
-          value={this.state.value}
+          value={this.props.inputValue}
+          disabled={this.props.disabled}
           onChange={this.handleChange}
+          onKeyPress={this.handleEnter}
         />
       </div>
     )
   },
+  handleEnter: function(e) {
+    if (e.charCode === 13) {
+      this.props.startTimer()
+    }
+  },
   handleChange: function(e) {
     e.preventDefault()
-    this.setState({ value: e.target.value })
+    this.props.handleInputChange(e.target.value)
     const min = +e.target.value
     console.log(min)
     if (isNaN(min)) {

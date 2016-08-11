@@ -11,13 +11,16 @@ import CircleProgress from './components/progressCircle.js'
 import './vendor/circle-progressbar.css'
 import store from 'store'
 
+window.addEventListener('beforeunload', (e) => 'Are you sure you want to leave?')
+
 const App = React.createClass({
   getInitialState: function() {
     return {
+      inputValue: 60,
       timerLength: 60, // seconds
       currentTimer: 60,
-      breakLength: 300,
-      breakTimer: 300,
+      breakLength: 60,
+      breakTimer: 60,
       status: 'pending',
       valid: true
     }
@@ -27,7 +30,8 @@ const App = React.createClass({
     if (pomodoro) {
       this.setState({
         timerLength: pomodoro.timer.length,
-        currentTimer: pomodoro.timer.length
+        currentTimer: pomodoro.timer.length,
+        inputValue: pomodoro.timer.length / 60
       })
     }
     Notification.requestPermission()
@@ -41,24 +45,32 @@ const App = React.createClass({
         <div className="row">
           <div className="col-md-4 col-md-offset-4">
             <TimerLengthControl
-              timerLength={this.state.timerLength}
+              inputValue={this.state.inputValue}
+              disabled={this.state.status === 'running'}
               valid={this.state.valid}
               handleTimerLengthChange={this.handleTimerLengthChange}
+              handleInputChange={this.handleInputChange}
               handleValidation={this.handleValidation}
+              startTimer={this.startTimer}
             />
-          <StartButton
-            startTimer={this.startTimer}
-            disabled={!this.state.valid}
-          />
-          <ResetButton reset={this.resetTimer} />
           <CircleProgress
             percentage={calculateRemainingPercent(this.state.currentTimer, this.state.timerLength)}
             timeRemaining={this.state.currentTimer}
           />
+          <StartButton
+            startTimer={this.startTimer}
+            disabled={!this.state.valid || this.state.status === 'running'}
+          />
+          <ResetButton reset={this.resetTimer} />
           </div>
         </div>
       </div>
     )
+  },
+  handleInputChange: function(value) {
+    this.setState({
+      inputValue: value
+    })
   },
   handleTimerLengthChange: function(length) {
     this.setState({
