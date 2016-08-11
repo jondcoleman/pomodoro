@@ -24,10 +24,12 @@ const App = React.createClass({
   },
   componentDidMount: function() {
     const pomodoro = store.get('pomodoro')
-    this.setState({
-      timerLength: pomodoro.timer.length,
-      currentTimer: pomodoro.timer.length
-    })
+    if (pomodoro) {
+      this.setState({
+        timerLength: pomodoro.timer.length,
+        currentTimer: pomodoro.timer.length
+      })
+    }
     Notification.requestPermission()
   },
   render: function() {
