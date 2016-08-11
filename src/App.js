@@ -10,8 +10,12 @@ import calculateRemainingPercent from './utils/calculateRemainingPercent.js'
 import CircleProgress from './components/progressCircle.js'
 import './vendor/circle-progressbar.css'
 import store from 'store'
+import Favico from 'favico.js'
 
 window.addEventListener('beforeunload', (e) => 'Are you sure you want to leave?')
+const favicon = new Favico({
+    animation:'slide'
+})
 
 const App = React.createClass({
   getInitialState: function() {
@@ -36,32 +40,40 @@ const App = React.createClass({
     }
     Notification.requestPermission()
   },
-  render: function() {
-    if (this.state.status === 'finished') return (
-      <TimerFinished reset={this.resetTimer} />
+  renderMain: function() {
+    return (
+      <div>
+        <TimerLengthControl
+          inputValue={this.state.inputValue}
+          disabled={this.state.status === 'running'}
+          valid={this.state.valid}
+          handleTimerLengthChange={this.handleTimerLengthChange}
+          handleInputChange={this.handleInputChange}
+          handleValidation={this.handleValidation}
+          startTimer={this.startTimer}
+          />
+        <CircleProgress
+          percentage={calculateRemainingPercent(this.state.currentTimer, this.state.timerLength)}
+          timeRemaining={this.state.currentTimer}
+          />
+        <StartButton
+          startTimer={this.startTimer}
+          disabled={!this.state.valid || this.state.status === 'running'}
+          />
+        <ResetButton reset={this.resetTimer} />
+      </div>
     )
+  },
+  render: function() {
     return (
       <div className="container App">
         <div className="row">
           <div className="col-md-4 col-md-offset-4">
-            <TimerLengthControl
-              inputValue={this.state.inputValue}
-              disabled={this.state.status === 'running'}
-              valid={this.state.valid}
-              handleTimerLengthChange={this.handleTimerLengthChange}
-              handleInputChange={this.handleInputChange}
-              handleValidation={this.handleValidation}
-              startTimer={this.startTimer}
-            />
-          <CircleProgress
-            percentage={calculateRemainingPercent(this.state.currentTimer, this.state.timerLength)}
-            timeRemaining={this.state.currentTimer}
-          />
-          <StartButton
-            startTimer={this.startTimer}
-            disabled={!this.state.valid || this.state.status === 'running'}
-          />
-          <ResetButton reset={this.resetTimer} />
+            {
+              this.state.status === 'finished' ?
+                <TimerFinished reset={this.resetTimer} /> :
+                this.renderMain()
+            }
           </div>
         </div>
       </div>
@@ -81,18 +93,30 @@ const App = React.createClass({
   },
   startTimer: function() {
     this.setState({ status: 'running' })
+    let min = Math.ceil(this.state.currentTimer / 60)
+    favicon.badge(min)
     const timer = setInterval(() => {
       // clear the timer if it is is done and set the state to finished
       if (this.state.status === 'pending') {
         clearInterval(timer)
         return
       }
+
+      // check if minutes have changed and update badge if so
+      let curMin = Math.ceil(this.state.currentTimer / 60)
+      if (min > curMin) {
+        min--
+        favicon.badge(curMin)
+      }
+
+      // timer done
       if (this.state.currentTimer === 0) {
         this.setState({ status: 'finished' })
         clearInterval(timer)
         new Notification('Timer\'s Up!')
         return
       }
+
       // decrement the timer each time
       this.setState({ currentTimer: this.state.currentTimer - 1 })
     }, 1000)
@@ -102,6 +126,7 @@ const App = React.createClass({
       status: 'pending',
       currentTimer: this.state.timerLength
     })
+    favicon.reset()
   },
   handleValidation: function(valid) {
     this.setState({ valid })

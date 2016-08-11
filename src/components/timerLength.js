@@ -32,7 +32,7 @@ const TimerLengthControl = React.createClass({
       return
     }
     this.props.handleValidation(true)
-    this.props.handleTimerLengthChange(min * 60)
+    this.props.handleTimerLengthChange(Math.floor(min * 60))
   }
 })
 
