@@ -16,7 +16,7 @@ window.addEventListener('beforeunload', (e) => 'Are you sure you want to leave?'
 const App = React.createClass({
   getInitialState: function() {
     return {
-      inputValue: 60,
+      inputValue: 1,
       timerLength: 60, // seconds
       currentTimer: 60,
       breakLength: 60,
