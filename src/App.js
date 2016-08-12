@@ -1,18 +1,20 @@
 require('offline-plugin/runtime').install()
 
-import React from 'react'
-import './App.css'
-import TimerLengthControl from './components/timerLength.js'
-import StartButton from './components/startButton.js'
-import TimerFinished from './components/timerFinished.js'
-import ResetButton from './components/resetButton.js'
-import calculateRemainingPercent from './utils/calculateRemainingPercent.js'
-import CircleProgress from './components/progressCircle.js'
 import './vendor/circle-progressbar.css'
+import './App.css'
+import React from 'react'
 import store from 'store'
 import Favico from 'favico.js'
+import StartButton from './components/startButton.js'
+import ResetButton from './components/resetButton.js'
+import TimerFinished from './components/timerFinished.js'
+import CircleProgress from './components/progressCircle.js'
+import TimerLengthControl from './components/timerLength.js'
+import calculateRemainingPercent from './utils/calculateRemainingPercent.js'
 
 window.addEventListener('beforeunload', (e) => 'Are you sure you want to leave?')
+Notification.requestPermission()
+
 const favicon = new Favico({
     animation:'slide'
 })
@@ -30,6 +32,7 @@ const App = React.createClass({
     }
   },
   componentDidMount: function() {
+    // set state from local storage if it's there
     const pomodoro = store.get('pomodoro')
     if (pomodoro) {
       this.setState({
@@ -38,7 +41,6 @@ const App = React.createClass({
         inputValue: pomodoro.timer.length / 60
       })
     }
-    Notification.requestPermission()
   },
   renderMain: function() {
     return (
