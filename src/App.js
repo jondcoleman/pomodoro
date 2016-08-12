@@ -72,9 +72,9 @@ const App = React.createClass({
         <div className="row">
           <div className="col-md-4 col-md-offset-4">
             {
-              this.state.status === 'finished' ?
-                <TimerFinished reset={this.resetTimer} /> :
-                this.renderMain()
+              this.state.status === 'finished'
+              ? <TimerFinished reset={this.resetTimer} />
+              : this.renderMain()
             }
           </div>
         </div>
