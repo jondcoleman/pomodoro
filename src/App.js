@@ -136,9 +136,3 @@ const App = React.createClass({
 })
 
 export default App
-
-
-// <RemainingCircle
-//   percent={calculateRemainingPercent(this.state.timerLength, this.state.currentTimer)}
-//   remainingTime={this.state.currentTimer}
-// />
