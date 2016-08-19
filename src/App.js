@@ -12,7 +12,9 @@ import CircleProgress from './components/progressCircle.js'
 import TimerLengthControl from './components/timerLength.js'
 import calculateRemainingPercent from './utils/calculateRemainingPercent.js'
 
-window.addEventListener('beforeunload', (e) => 'Are you sure you want to leave?')
+window.addEventListener('beforeunload', (e) => {
+  e.returnValue = 'something' // custom message not available
+})
 Notification.requestPermission()
 
 const favicon = new Favico({
