@@ -5,12 +5,15 @@ import './App.css'
 import React from 'react'
 import store from 'store'
 import Favico from 'favico.js'
+import Audio from './components/audio.js'
 import StartButton from './components/startButton.js'
 import ResetButton from './components/resetButton.js'
 import TimerFinished from './components/timerFinished.js'
 import CircleProgress from './components/progressCircle.js'
 import TimerLengthControl from './components/timerLength.js'
 import calculateRemainingPercent from './utils/calculateRemainingPercent.js'
+
+const soundUrl = 'https://dl.dropboxusercontent.com/u/600747/Turn.mp3'
 
 window.addEventListener('beforeunload', (e) => {
   e.returnValue = 'something' // custom message not available
@@ -73,6 +76,7 @@ const App = React.createClass({
       <div className="container App">
         <div className="row">
           <div className="col-md-4 col-md-offset-4">
+          <Audio src={soundUrl} play={this.state.status === 'finished'} />
             {
               this.state.status === 'finished'
               ? <TimerFinished reset={this.resetTimer} />
