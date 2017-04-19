@@ -13,7 +13,7 @@ import CircleProgress from './components/progressCircle.js'
 import TimerLengthControl from './components/timerLength.js'
 import calculateRemainingPercent from './utils/calculateRemainingPercent.js'
 
-const soundUrl = 'https://dl.dropboxusercontent.com/u/600747/Turn.mp3'
+const soundUrl = 'https://s3.amazonaws.com/jc-static-assets/Turn.mp3'
 
 window.addEventListener('beforeunload', (e) => {
   e.returnValue = 'something' // custom message not available
