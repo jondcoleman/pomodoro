@@ -121,7 +121,11 @@ const App = React.createClass({
       if (this.state.currentTimer === 0) {
         this.setState({ status: 'finished' })
         clearInterval(timer)
-        new Notification('Timer\'s Up!')
+        const notif = new Notification('Timer\'s Up!')
+        notif.onclick = e => {
+          window.focus()
+          notif.close()
+        }
         return
       }
 
